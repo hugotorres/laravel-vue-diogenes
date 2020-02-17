@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\User;
+use App\Profile;
+use App\Category;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -28,7 +30,7 @@ class RegisterController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/home';
+    protected $redirectTo = '/login?k=success';
 
     /**
      * Create a new controller instance.
@@ -51,6 +53,9 @@ class RegisterController extends Controller
         return Validator::make($data, [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'bday' => ['required', 'string'],
+            'gender' => ['required', 'string' ],
+            'rol' => ['required', 'string' ],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
         ]);
     }
@@ -63,10 +68,46 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        return User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => Hash::make($data['password']),
-        ]);
+
+
+        $today = date("Y-m-d");
+        $diff = date_diff(date_create($data['bday']), date_create($today));
+        $age=$diff->format('%y');
+
+
+        if($age>=18){
+                $user = User::create([
+                    'name' => $data['name'],
+                    'email' => $data['email'],
+                    'bday' => $data['bday'],
+                    'gender' => $data['gender'],
+                    'rol' => $data['rol'],
+                    'status' => 1,
+                    'password' => Hash::make($data['password']),
+                ]);
+                $profile = Profile::create([
+                    'user_id' => $user['id'],
+                    'text' => $user['name'],
+                    'bday' => $user['bday'],
+                    'gender' => $user['gender']
+                ]);
+
+
+                return $user;
+        }
+        else{
+            $user = User::create([
+                'name' => $data['name'],
+                'email' => $data['email'],
+                'bday' => $data['bday'],
+                'gender' => $data['gender'],
+                'rol' => $data['rol'],
+                'status' => 0,
+                'password' => Hash::make($data['password']),
+            ]);
+
+
+            return $user;
+        }
     }
 }

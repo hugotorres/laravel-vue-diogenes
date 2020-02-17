@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Category;
 
 class HomeController extends Controller
 {
@@ -23,6 +24,19 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+        $categories = Category::all();
+        return view('welcome', ['categories' => $categories]);
+    }
+
+
+    public function options(Request $request, Response $response)
+    {
+        $origin = $request->header('origin') ?: $request->url();
+
+        $response->header('Access-Control-Allow-Origin', $origin);
+        $response->header('Access-Control-Allow-Headers', 'origin, content-type, accept');
+        $response->header('Access-Control-Allow-Methods', 'GET, HEAD, OPTIONS, POST, PATCH, DELETE');
+
+        return $response;
     }
 }

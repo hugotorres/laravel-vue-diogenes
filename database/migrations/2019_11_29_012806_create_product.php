@@ -20,8 +20,8 @@ class CreateProduct extends Migration
             $table->string('longitude');
             $table->longText('description');
             $table->string('url');
-            $table->string('image');
-            $table->longText('text');
+            $table->longText('image')->default('default.jpg');
+            $table->longText('text')->default('default text');
             $table->string('category_id');
             $table->timestamps();
         });
