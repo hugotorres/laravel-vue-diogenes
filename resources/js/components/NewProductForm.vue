@@ -107,31 +107,31 @@
                         class="form-control"
                       ></textarea>
                     </div>
-                                    <div class="box">
-                  <input
-                    @change="fileSelected"
-                    type="file"
-                    name="files"
-                    id="file-1"
-                    class="inputfile inputfile-1"
-                    data-multiple-caption="{count} files selected"
-                    multiple
-                    accept="image/*"
-                  />
-                  <label for="file-1">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="20"
-                      height="17"
-                      viewBox="0 0 20 17"
-                    >
-                      <path
-                        d="M10 0l-5.2 4.9h3.3v5.1h3.8v-5.1h3.3l-5.2-4.9zm9.3 11.5l-3.2-2.1h-2l3.4 2.6h-3.5c-.1 0-.2.1-.2.1l-.8 2.3h-6l-.8-2.2c-.1-.1-.1-.2-.2-.2h-3.6l3.4-2.6h-2l-3.2 2.1c-.4.3-.7 1-.6 1.5l.6 3.1c.1.5.7.9 1.2.9h16.3c.6 0 1.1-.4 1.3-.9l.6-3.1c.1-.5-.2-1.2-.7-1.5z"
+                    <div class="box">
+                      <input
+                        @change="fileSelected"
+                        type="file"
+                        name="files"
+                        id="file-1"
+                        class="inputfile inputfile-1"
+                        data-multiple-caption="{count} files selected"
+                        multiple
+                        accept="image/*"
                       />
-                    </svg>
-                    <span>Choose a file&hellip;</span>
-                  </label>
-                </div>
+                      <label for="file-1">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="20"
+                          height="17"
+                          viewBox="0 0 20 17"
+                        >
+                          <path
+                            d="M10 0l-5.2 4.9h3.3v5.1h3.8v-5.1h3.3l-5.2-4.9zm9.3 11.5l-3.2-2.1h-2l3.4 2.6h-3.5c-.1 0-.2.1-.2.1l-.8 2.3h-6l-.8-2.2c-.1-.1-.1-.2-.2-.2h-3.6l3.4-2.6h-2l-3.2 2.1c-.4.3-.7 1-.6 1.5l.6 3.1c.1.5.7.9 1.2.9h16.3c.6 0 1.1-.4 1.3-.9l.6-3.1c.1-.5-.2-1.2-.7-1.5z"
+                          />
+                        </svg>
+                        <span>Choose a file&hellip;</span>
+                      </label>
+                    </div>
                   </div>
                   <div class="container col-sm-8 text-center center-block">
                     <button
@@ -176,13 +176,13 @@
                 </div>
               </div>
             </div>
-             <div class="container col-sm-8 text-center center-block">
-                    <button
-                      id="find-me"
-                      type="submit"
-                      class="btn btn-success btn-lg btn-block"
-                      :disabled="!profile.text && !profile.category_id && !profile.description"
-                    >Guardar Cambios</button>
+            <div class="container col-sm-8 text-center center-block">
+              <button
+                id="find-me"
+                type="submit"
+                class="btn btn-success btn-lg btn-block"
+                :disabled="!profile.text && !profile.category_id && !profile.description"
+              >Guardar Cambios</button>
             </div>
             <div class="col-sm-12">
               <div
@@ -191,7 +191,7 @@
                 v-bind:key="item.id"
               >
                 <img v-if="item != ''" :src="'/uploads/profile/'+item" alt />
-                <a href="" class="button btn-sm btn-outline-danger">Borrar</a>
+                <a @click="deleteImage(item)" class="button btn-sm btn-outline-danger">Borrar</a>
               </div>
             </div>
 
@@ -281,15 +281,14 @@
               </div>
             </div>
 
-             <div class="container col-sm-8 text-center center-block">
-                    <button
-                      id="find-me"
-                      type="submit"
-                      class="btn btn-success btn-lg btn-block"
-                      :disabled="!profile.text && !profile.category_id && !profile.description"
-                    >Guardar Cambios</button>
-                  </div>
-
+            <div class="container col-sm-8 text-center center-block">
+              <button
+                id="find-me"
+                type="submit"
+                class="btn btn-success btn-lg btn-block"
+                :disabled="!profile.text && !profile.category_id && !profile.description"
+              >Guardar Cambios</button>
+            </div>
           </div>
         </div>
 
@@ -443,9 +442,25 @@ export default {
         }
       };
 
-      axios.put(URL, data, config).then(response => {
-        console.log("image upload response > ", response);
-      });
+      axios
+        .put(URL, data, config)
+        .then(response => {
+          console.log("image upload response > ", response);
+        })
+        .then(response => alert(response));
+    },
+    deleteImage(image) {
+      let data = new FormData();
+      data.append("image", image);
+      console.log(data);
+      axios
+        .delete("profile/image/", data)
+        .then(response => {
+          console.log("image deleted  > ", response);
+        })
+        .then(response => {
+          console.log(response);
+        });
     },
 
     formSubmit(e) {

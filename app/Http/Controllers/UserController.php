@@ -7,6 +7,7 @@ use App\User;
 use App\Profile;
 use App\Category;
 use Illuminate\Support\Facades\Auth;
+use Debugbar;
 
 use Illuminate\Support\Str;
 use Illuminate\Http\UploadedFile;
@@ -36,6 +37,10 @@ class UserController extends Controller
         }
 
         return redirect()->route('admin.categories' );
+
+    }
+    public function profileImageDelete(Request $request){
+        Debugbar::info($request->all());
 
     }
 

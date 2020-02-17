@@ -32,6 +32,8 @@ Auth::routes();
 
 Route::get('/favorites', 'HomeController@index')->name('favorites');
 
+
 Route::get('/user/{id}', 'UserController@profile')->name('user.profile');
+Route::delete('/user/profile/image', 'UserController@profileImageDelete')->name('user.profile.image.delete');
 
 //Route::options('{all}', 'HomeController@options')->where('all', '.*');

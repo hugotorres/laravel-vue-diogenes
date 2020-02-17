@@ -3150,7 +3150,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {},
   data: function data() {
@@ -3189,6 +3188,18 @@ __webpack_require__.r(__webpack_exports__);
       };
       axios.put(URL, data, config).then(function (response) {
         console.log("image upload response > ", response);
+      }).then(function (response) {
+        return alert(response);
+      });
+    },
+    deleteImage: function deleteImage(image) {
+      var data = new FormData();
+      data.append("image", image);
+      console.log(data);
+      axios["delete"]("profile/image/", data).then(function (response) {
+        console.log("image deleted  > ", response);
+      }).then(function (response) {
+        console.log(response);
       });
     },
     formSubmit: function formSubmit(e) {
@@ -41002,7 +41013,11 @@ var render = function() {
                               "a",
                               {
                                 staticClass: "button btn-sm btn-outline-danger",
-                                attrs: { href: "" }
+                                on: {
+                                  click: function($event) {
+                                    return _vm.deleteImage(item)
+                                  }
+                                }
                               },
                               [_vm._v("Borrar")]
                             )
